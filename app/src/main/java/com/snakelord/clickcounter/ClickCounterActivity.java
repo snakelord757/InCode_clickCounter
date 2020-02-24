@@ -10,7 +10,7 @@ public class ClickCounterActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_click_conter);
+        setContentView(R.layout.activity_click_counter);
 
         TextView counterTextView = findViewById(R.id.counter);
         counterTextView.setText(getIntent().getStringExtra("Counter"));
