@@ -6,8 +6,6 @@
     android:layout_height="match_parent"
     tools:context=".MainActivity">
 
-
-
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/toolbar"
         android:layout_height="wrap_content"
@@ -26,7 +24,8 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent"/>
+        app:layout_constraintBottom_toBottomOf="parent"
+        tools:src="@drawable/ic_cookie_button"/>
 
     <ImageView
         android:id="@+id/crumbs"
@@ -48,6 +47,7 @@
         android:textSize="20sp"
         app:layout_constraintBottom_toTopOf="@id/addClickButton"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"/>
+        app:layout_constraintEnd_toEndOf="parent"
+        tools:text="@string/сlick_counter_text"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
