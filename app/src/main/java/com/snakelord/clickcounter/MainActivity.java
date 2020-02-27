@@ -22,8 +22,11 @@ public class MainActivity extends AppCompatActivity {
     private int counter = 0;
     private int status = CookieConstants.STATE_FULL;
     private SharedPreferences userClickCounterSharedPreferences;
+    private Animation crumbsFallingAnimation;
+    private Animation cookieZoomAnimation;
     private ImageButton addClickImageButton;
-    
+    private ImageView crumbsImageView;
+    private TextView clickCounterTextView;
     static final String USER_CLICK_COUNTER = "userClickCounter";
     static final String NUMBER_OF_CLICK = "numberOfClick";
     static final String COOKIE_STATUS = "cookieStatus";
@@ -34,89 +37,34 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        userClickCounterSharedPreferences = getSharedPreferences(USER_CLICK_COUNTER, Context.MODE_PRIVATE);
         addClickImageButton = findViewById(R.id.addClickButton);
-        final TextView clickCounterTextView = findViewById(R.id.click_counter);
-        clickCounterTextView.setText(getString(R.string.сlick_counter_text, counter));
-        final ImageView crumbsImageView = findViewById(R.id.crumbs);
-        final Animation cookieZoomAnimation = AnimationUtils.loadAnimation(this, R.anim.button_zoom);
-        final Animation crumbsFallingAnimation = AnimationUtils.loadAnimation(this, R.anim.cookie_crums_falling);
-        crumbsFallingAnimation.setAnimationListener(new AnimationListener() {
-            @Override
-            public void onAnimationStart(Animation animation) {
-                crumbsImageView.setVisibility(View.VISIBLE);
-            }
-
-            @Override
-            public void onAnimationEnd(Animation animation) {
-                crumbsImageView.setVisibility(View.GONE);
-            }
-
-            @Override
-            public void onAnimationRepeat(Animation animation) {
-            }
-        });
-        addClickImageButton.setOnClickListener(v -> {
-            if (counter >= CookieConstants.DAMAGE_STATE_COOKIE_IS_GONE) {
-                addClickImageButton.setVisibility(View.GONE);
-            }
-            else {
-                clickCounterTextView.setText(getString(R.string.сlick_counter_text, ++counter));
-                updateCookieStatus();
-                setCookieStatus();
-                v.startAnimation(cookieZoomAnimation);
-                crumbsImageView.startAnimation(crumbsFallingAnimation);
-            }
-        });
+        clickCounterTextView = findViewById(R.id.click_counter);
+        crumbsImageView = findViewById(R.id.crumbs);
+        cookieZoomAnimation = AnimationUtils.loadAnimation(this, R.anim.button_zoom);
+        crumbsFallingAnimation = AnimationUtils.loadAnimation(this, R.anim.cookie_crums_falling);
+        userClickCounterSharedPreferences = getSharedPreferences(USER_CLICK_COUNTER, Context.MODE_PRIVATE);
+        crumbsFallingAnimationListener();
+        setAddClickImageButtonClickListener();
     }
 
     private void loadClickCounterAndCookieStatus() {
         counter = userClickCounterSharedPreferences.getInt(NUMBER_OF_CLICK, 0);
+        clickCounterTextView.setText(getString(R.string.сlick_counter_text, counter));
         status = userClickCounterSharedPreferences.getInt(COOKIE_STATUS, 0);
     }
 
     private void setCookieStatus() {
         switch (status) {
-            case CookieConstants.STATE_DAMAGED_10_PERCENTS: {
-                addClickImageButton.setImageResource(R.drawable.ic_cookie_button_10);
-                break;
-            }
-            case CookieConstants.STATE_DAMAGED_20_PERCENTS: {
-                addClickImageButton.setImageResource(R.drawable.ic_cookie_button_20);
-                break;
-            }
-            case CookieConstants.STATE_DAMAGED_30_PERCENTS: {
-                addClickImageButton.setImageResource(R.drawable.ic_cookie_button_30);
-                break;
-            }
-            case CookieConstants.STATE_DAMAGED_40_PERCENTS: {
-                addClickImageButton.setImageResource(R.drawable.ic_cookie_button_40);
-                break;
-            }
-            case CookieConstants.STATE_DAMAGED_50_PERCENTS: {
-                addClickImageButton.setImageResource(R.drawable.ic_cookie_button_50);
-                break;
-            }
-            case CookieConstants.STATE_DAMAGED_60_PERCENTS: {
-                addClickImageButton.setImageResource(R.drawable.ic_cookie_button_60);
-                break;
-            }
-            case CookieConstants.STATE_DAMAGED_70_PERCENTS: {
-                addClickImageButton.setImageResource(R.drawable.ic_cookie_button_70);
-                break;
-            }
-            case CookieConstants.STATE_DAMAGED_80_PERCENTS: {
-                addClickImageButton.setImageResource(R.drawable.ic_cookie_button_80);
-                break;
-            }
-            case CookieConstants.STATE_DAMAGED_90_PERCENTS: {
-                addClickImageButton.setImageResource(R.drawable.ic_cookie_button_90);
-                break;
-            }
-            case CookieConstants.STATE_DAMAGED_100_PERCENTS: {
-                addClickImageButton.setImageResource(R.drawable.ic_cookie_button_100);
-                break;
-            }
+            case CookieConstants.STATE_DAMAGED_10_PERCENTS: { addClickImageButton.setImageResource(R.drawable.ic_cookie_button_10); break; }
+            case CookieConstants.STATE_DAMAGED_20_PERCENTS: { addClickImageButton.setImageResource(R.drawable.ic_cookie_button_20); break; }
+            case CookieConstants.STATE_DAMAGED_30_PERCENTS: { addClickImageButton.setImageResource(R.drawable.ic_cookie_button_30); break; }
+            case CookieConstants.STATE_DAMAGED_40_PERCENTS: { addClickImageButton.setImageResource(R.drawable.ic_cookie_button_40); break; }
+            case CookieConstants.STATE_DAMAGED_50_PERCENTS: { addClickImageButton.setImageResource(R.drawable.ic_cookie_button_50); break; }
+            case CookieConstants.STATE_DAMAGED_60_PERCENTS: { addClickImageButton.setImageResource(R.drawable.ic_cookie_button_60); break; }
+            case CookieConstants.STATE_DAMAGED_70_PERCENTS: { addClickImageButton.setImageResource(R.drawable.ic_cookie_button_70); break; }
+            case CookieConstants.STATE_DAMAGED_80_PERCENTS: { addClickImageButton.setImageResource(R.drawable.ic_cookie_button_80); break; }
+            case CookieConstants.STATE_DAMAGED_90_PERCENTS: { addClickImageButton.setImageResource(R.drawable.ic_cookie_button_90); break; }
+            case CookieConstants.STATE_DAMAGED_100_PERCENTS: { addClickImageButton.setImageResource(R.drawable.ic_cookie_button_100); break;}
             default : addClickImageButton.setImageResource(R.drawable.ic_cookie_button);
         }
     }
@@ -144,6 +92,46 @@ public class MainActivity extends AppCompatActivity {
             status = CookieConstants.STATE_DAMAGED_100_PERCENTS;
     }
 
+    private void crumbsFallingAnimationListener() {
+        crumbsFallingAnimation.setAnimationListener(new AnimationListener() {
+            @Override
+            public void onAnimationStart(Animation animation) {
+                crumbsImageView.setVisibility(View.VISIBLE);
+            }
+
+            @Override
+            public void onAnimationEnd(Animation animation) {
+                crumbsImageView.setVisibility(View.GONE);
+            }
+
+            @Override
+            public void onAnimationRepeat(Animation animation) {
+            }
+        });
+    }
+
+    private void setAddClickImageButtonClickListener() {
+        addClickImageButton.setOnClickListener(v -> {
+            if (counter >= CookieConstants.DAMAGE_STATE_COOKIE_IS_GONE) {
+                addClickImageButton.setVisibility(View.GONE);
+            }
+            else {
+                clickCounterTextView.setText(getString(R.string.сlick_counter_text, ++counter));
+                updateCookieStatus();
+                setCookieStatus();
+                v.startAnimation(cookieZoomAnimation);
+                crumbsImageView.startAnimation(crumbsFallingAnimation);
+            }
+        });
+    }
+
+    private Intent sendCounterToActivity()
+    {
+        Intent clickCounterActivityIntent = new Intent(this, ClickCounterActivity.class);
+        clickCounterActivityIntent.putExtra("Counter", Integer.toString(counter));
+        return clickCounterActivityIntent;
+    }
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_toolbar_button, menu);
@@ -152,10 +140,8 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-        if (item.getItemId() == R.id.toolbar_button) {
-            Intent showClickCounter = new Intent(this, ClickCounterActivity.class);
-            showClickCounter.putExtra("Counter", Integer.toString(counter));
-            startActivity(showClickCounter);
+        if (item.getItemId() == R.id.click_counter_activity_button) {
+            startActivity(sendCounterToActivity());
         }
         return super.onOptionsItemSelected(item);
     }
@@ -179,6 +165,10 @@ public class MainActivity extends AppCompatActivity {
     protected void onDestroy() {
         userClickCounterSharedPreferences = null;
         addClickImageButton = null;
+        crumbsFallingAnimation = null;
+        cookieZoomAnimation = null;
+        clickCounterTextView = null;
+        crumbsImageView = null;
         super.onDestroy();
     }
 }

@@ -4,7 +4,7 @@
 
     <item
         android:icon="@mipmap/ic_launcher"
-        android:id="@+id/toolbar_button"
+        android:id="@+id/click_counter_activity_button"
         android:title="@string/app_name"
         app:showAsAction="always"/>
 
