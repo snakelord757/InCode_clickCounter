@@ -23,9 +23,8 @@ public class MainActivity extends AppCompatActivity {
     private static final String USER_CLICK_COUNTER = "userClickCounter";
     private static final String NUMBER_OF_CLICK = "numberOfClick";
     private static final String COOKIE_STATUS_NAME = "cookieStatusName";
-    static final String CLICK_COUNTER = "clickCounter";
     private int counter = 0;
-    private CookieState status;
+    private CookieStates status;
     private String cookieStatusName;
     private SharedPreferences userClickCounterSharedPreferences;
     private Animation crumbsFallingAnimation;
@@ -54,7 +53,7 @@ public class MainActivity extends AppCompatActivity {
         counter = userClickCounterSharedPreferences.getInt(NUMBER_OF_CLICK, 0);
         clickCounterTextView.setText(getString(R.string.сlick_counter_text, counter));
         cookieStatusName = userClickCounterSharedPreferences.getString(COOKIE_STATUS_NAME, "STATE_FULL");
-        status = CookieState.valueOf(cookieStatusName);
+        status = CookieStates.valueOf(cookieStatusName);
     }
 
     private void setCookieStatus() {
@@ -105,26 +104,26 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void updateCookieStatus() {
-        if (counter >= CookieDamageState.DAMAGE_STATE_10_PERCENTS.getValue() && counter < CookieDamageState.DAMAGE_STATE_20_PERCENTS.getValue())
-            status = CookieState.STATE_DAMAGED_10_PERCENTS;
-        else if (counter >= CookieDamageState.DAMAGE_STATE_20_PERCENTS.getValue() && counter < CookieDamageState.DAMAGE_STATE_30_PERCENTS.getValue())
-            status = CookieState.STATE_DAMAGED_20_PERCENTS;
-        else if (counter >= CookieDamageState.DAMAGE_STATE_30_PERCENTS.getValue() && counter < CookieDamageState.DAMAGE_STATE_40_PERCENTS.getValue())
-            status = CookieState.STATE_DAMAGED_30_PERCENTS;
-        else if (counter >= CookieDamageState.DAMAGE_STATE_40_PERCENTS.getValue() && counter < CookieDamageState.DAMAGE_STATE_50_PERCENTS.getValue())
-            status = CookieState.STATE_DAMAGED_40_PERCENTS;
-        else if (counter >= CookieDamageState.DAMAGE_STATE_50_PERCENTS.getValue() && counter < CookieDamageState.DAMAGE_STATE_60_PERCENTS.getValue())
-            status = CookieState.STATE_DAMAGED_50_PERCENTS;
-        else if (counter >= CookieDamageState.DAMAGE_STATE_60_PERCENTS.getValue() && counter < CookieDamageState.DAMAGE_STATE_70_PERCENTS.getValue())
-            status = CookieState.STATE_DAMAGED_60_PERCENTS;
-        else if (counter >= CookieDamageState.DAMAGE_STATE_70_PERCENTS.getValue() && counter < CookieDamageState.DAMAGE_STATE_80_PERCENTS.getValue())
-            status = CookieState.STATE_DAMAGED_70_PERCENTS;
-        else if (counter >= CookieDamageState.DAMAGE_STATE_80_PERCENTS.getValue() && counter < CookieDamageState.DAMAGE_STATE_90_PERCENTS.getValue())
-            status = CookieState.STATE_DAMAGED_80_PERCENTS;
-        else if (counter >= CookieDamageState.DAMAGE_STATE_90_PERCENTS.getValue() && counter < CookieDamageState.DAMAGE_STATE_100_PERCENTS.getValue())
-            status = CookieState.STATE_DAMAGED_90_PERCENTS;
-        else if (counter >= CookieDamageState.DAMAGE_STATE_100_PERCENTS.getValue())
-            status = CookieState.STATE_DAMAGED_100_PERCENTS;
+        if (counter >= CookieDamageStates.DAMAGE_STATE_10_PERCENTS.getValue() && counter < CookieDamageStates.DAMAGE_STATE_20_PERCENTS.getValue())
+            status = CookieStates.STATE_DAMAGED_10_PERCENTS;
+        else if (counter >= CookieDamageStates.DAMAGE_STATE_20_PERCENTS.getValue() && counter < CookieDamageStates.DAMAGE_STATE_30_PERCENTS.getValue())
+            status = CookieStates.STATE_DAMAGED_20_PERCENTS;
+        else if (counter >= CookieDamageStates.DAMAGE_STATE_30_PERCENTS.getValue() && counter < CookieDamageStates.DAMAGE_STATE_40_PERCENTS.getValue())
+            status = CookieStates.STATE_DAMAGED_30_PERCENTS;
+        else if (counter >= CookieDamageStates.DAMAGE_STATE_40_PERCENTS.getValue() && counter < CookieDamageStates.DAMAGE_STATE_50_PERCENTS.getValue())
+            status = CookieStates.STATE_DAMAGED_40_PERCENTS;
+        else if (counter >= CookieDamageStates.DAMAGE_STATE_50_PERCENTS.getValue() && counter < CookieDamageStates.DAMAGE_STATE_60_PERCENTS.getValue())
+            status = CookieStates.STATE_DAMAGED_50_PERCENTS;
+        else if (counter >= CookieDamageStates.DAMAGE_STATE_60_PERCENTS.getValue() && counter < CookieDamageStates.DAMAGE_STATE_70_PERCENTS.getValue())
+            status = CookieStates.STATE_DAMAGED_60_PERCENTS;
+        else if (counter >= CookieDamageStates.DAMAGE_STATE_70_PERCENTS.getValue() && counter < CookieDamageStates.DAMAGE_STATE_80_PERCENTS.getValue())
+            status = CookieStates.STATE_DAMAGED_70_PERCENTS;
+        else if (counter >= CookieDamageStates.DAMAGE_STATE_80_PERCENTS.getValue() && counter < CookieDamageStates.DAMAGE_STATE_90_PERCENTS.getValue())
+            status = CookieStates.STATE_DAMAGED_80_PERCENTS;
+        else if (counter >= CookieDamageStates.DAMAGE_STATE_90_PERCENTS.getValue() && counter < CookieDamageStates.DAMAGE_STATE_100_PERCENTS.getValue())
+            status = CookieStates.STATE_DAMAGED_90_PERCENTS;
+        else if (counter >= CookieDamageStates.DAMAGE_STATE_100_PERCENTS.getValue())
+            status = CookieStates.STATE_DAMAGED_100_PERCENTS;
     }
 
     private void setCrumbsFallingAnimationListener() {
@@ -147,7 +146,7 @@ public class MainActivity extends AppCompatActivity {
 
     private void setAddClickImageButtonClickListener() {
         addClickImageButton.setOnClickListener(v -> {
-            if (counter >= CookieDamageState.DAMAGE_STATE_COOKIE_IS_GONE.getValue()) {
+            if (counter >= CookieDamageStates.DAMAGE_STATE_COOKIE_IS_GONE.getValue()) {
                 addClickImageButton.setVisibility(View.GONE);
             } else {
                 clickCounterTextView.setText(getString(R.string.сlick_counter_text, ++counter));

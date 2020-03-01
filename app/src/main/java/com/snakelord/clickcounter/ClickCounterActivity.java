@@ -7,9 +7,9 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.widget.TextView;
 
-import static com.snakelord.clickcounter.MainActivity.CLICK_COUNTER;
-
 public class ClickCounterActivity extends AppCompatActivity {
+
+    private static final String CLICK_COUNTER = "clickCounter";
 
     public static Intent startCounterActivity(Context context, int counter) {
         Intent clickCounterActivityIntent = new Intent(context, ClickCounterActivity.class);
